@@ -16,8 +16,8 @@ class _PassManager:
                     )""")
 
     def insert_service(self):
-        service = input("Service: ")
-        password = input("Password: ")
+        service = input("Service: ").strip()
+        password = input("Password: ").strip()
         self.cur.execute(f"SELECT service FROM vault WHERE service = '{service}'")
         if self.cur.fetchone() is None:
             self.cur.execute(f"INSERT OR IGNORE INTO vault VALUES (?, ?)", (service, password))
@@ -37,7 +37,7 @@ class _PassManager:
 
     def select_service(self):
         while True:
-            service = input("Type service title for searching: ")
+            service = input("Type service title for searching: ").strip()
             self.cur.execute(F"SELECT service FROM vault WHERE service = '{service}'")
             if self.cur.fetchone():
                 for value in self.cur.execute(F"SELECT service, password FROM vault WHERE service = '{service}'"):
@@ -49,14 +49,14 @@ class _PassManager:
 
     def update_service(self):
         while True:
-            service = input("Update the data of the service with the title: ")
+            service = input("Update the data of the service with the title: ").strip()
             self.cur.execute(F"SELECT service FROM vault WHERE service = '{service}'")
             if self.cur.fetchone() is None:
                 print("There is no such service. Try it again.")
                 break
 
             else:
-                what = input(R"Edit(type 'service' or 'password'): ")
+                what = input(R"Edit(type 'service' or 'password'): ").strip()
                 if what == "service":
                     new_name = input(R"New title: ")
                     self.cur.execute(F"UPDATE vault SET service = '{new_name}' WHERE service = '{service}' ")
@@ -65,7 +65,7 @@ class _PassManager:
                     break
 
                 elif what == "password":
-                    new_pass = input("New password: ")
+                    new_pass = input("New password: ").strip()
                     self.cur.execute(F"UPDATE vault SET password = '{new_pass}' WHERE service = '{service}'")
                     self.db.commit()
                     print("Password updated successfully!")
@@ -76,7 +76,7 @@ class _PassManager:
 
     def delete_service(self):
         while True:
-            service = input(R"Delete the service: ")
+            service = input(R"Delete the service: ").strrip()
             self.cur.execute(F"SELECT service FROM vault WHERE service = '{service}'")
             if self.cur.fetchone() is None:
                 print(R"There is no such service. Try it again.")
